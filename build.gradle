@@ -1,0 +1,129 @@
+plugins {
+   id 'groovy'
+   id 'maven-publish'
+   id "pl.allegro.tech.build.axion-release" version "1.9.3"
+   id "com.github.breadmoirai.github-release" version "2.0.1"
+   id 'org.unbroken-dome.test-sets' version '1.5.1'
+   id "com.github.ben-manes.versions" version "0.20.0"
+   id "com.redpillanalytics.gradle-analytics" version "1.1.9"
+}
+
+// send analytics
+analytics {
+   organization = 'Red Pill Analytics'
+   sinks {
+      pubsub
+   }
+}
+
+scmVersion {
+
+   tag {
+      prefix = 'v'
+      versionSeparator = ''
+   }
+   ignoreUncommittedChanges = false
+}
+
+//set Gradle version to SCM Version
+allprojects {
+   project.version = scmVersion.version
+   group = 'com.redpillanalytics'
+}
+
+githubRelease {
+
+   token = githubToken
+   owner = 'RedPillAnalytics'
+   repo = 'gradle-confluent'
+   tagName = "v${version}"
+   releaseAssets = fileTree(dir: buildDir, includes: ["**/*${version}*", "**/*${version}*.jar"]).toList()
+}
+
+dependencies {
+
+   // basic Groovy/Gradle stuff
+   implementation gradleApi()
+   implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
+   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '+'
+   implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
+
+   testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+repositories {
+   jcenter()
+   maven {
+      url "https://plugins.gradle.org/m2/"
+   }
+   maven {
+      url releaseUrl
+      authentication {
+         awsIm(AwsImAuthentication)
+      }
+   }
+   maven {
+      url snapshotUrl
+      authentication {
+         awsIm(AwsImAuthentication)
+      }
+   }
+}
+
+publishing {
+   publications {
+      maven(MavenPublication) {
+         from components.java
+      }
+   }
+   repositories {
+      maven {
+         url project.version.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
+         authentication {
+            awsIm(AwsImAuthentication)
+         }
+      }
+   }
+}
+
+group = 'com.redpillanalytics'
+
+// Options for all tests
+tasks.withType(Test) {
+   ignoreFailures true
+   testLogging.showStandardStreams true
+   systemProperty 'projectDir', temporaryDir
+}
+
+
+task('cleanJunit', type: Delete) {
+
+   delete getTestResultsDir()
+}
+
+ext.bucket = 's3://documentation.redpillanalytics.com'
+ext.bucketPath = 'gradle-utilities'
+
+
+task publishDocs {
+
+   description = 'Upload Groovydocs to s3.'
+   group = 'documentation'
+
+   doLast {
+
+      exec {
+         executable 'aws'
+         args 's3', 'sync', groovydoc.destinationDir.getPath(), "${bucket}/${bucketPath}/${version}/"
+      }
+
+      exec {
+         executable 'aws'
+         args 's3', 'sync', groovydoc.destinationDir.getPath(), "${bucket}/${bucketPath}/latest/"
+      }
+   }
+
+   dependsOn groovydoc
+}
+
+tasks.publish.dependsOn publishDocs
