@@ -86,8 +86,6 @@ publishing {
    }
 }
 
-group = 'com.redpillanalytics'
-
 // Options for all tests
 tasks.withType(Test) {
    ignoreFailures true
@@ -102,7 +100,7 @@ task('cleanJunit', type: Delete) {
 }
 
 ext.bucket = 's3://documentation.redpillanalytics.com'
-ext.bucketPath = 'gradle-utilities'
+ext.bucketPath = rootProject.name
 
 
 task publishDocs {
