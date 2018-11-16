@@ -28,6 +28,7 @@ scmVersion {
 //set Gradle version to SCM Version
 allprojects {
    project.version = scmVersion.version
+   group = 'com.redpillanalytics'
 }
 
 githubRelease {
@@ -42,18 +43,13 @@ githubRelease {
 dependencies {
 
    // basic Groovy/Gradle stuff
-   compile gradleApi()
-   compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
-   compile group: 'org.slf4j', name: 'slf4j-simple', version: '+'
-   compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
+   implementation gradleApi()
+   implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
+   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '+'
+   implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
 
-   testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
-   testCompile 'org.testcontainers:kafka:1.9.1'
-   testCompile 'org.testcontainers:spock:1.9.1'
+   testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
-
-// Default artifact naming.
-group = 'com.redpillanalytics'
 
 repositories {
    jcenter()
@@ -61,6 +57,28 @@ repositories {
       url "https://plugins.gradle.org/m2/"
    }
 }
+
+publishing {
+   publications {
+      maven(MavenPublication) {
+         from components.java
+      }
+   }
+   repositories {
+      maven {
+         if (project.version.endsWith('-SNAPSHOT')) {
+            url snapshotUrl
+         } else {
+            url releaseUrl
+         }
+         authentication {
+            awsIm(AwsImAuthentication)
+         }
+      }
+   }
+}
+
+group = 'com.redpillanalytics'
 
 // Options for all tests
 tasks.withType(Test) {
