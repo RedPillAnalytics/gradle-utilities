@@ -56,6 +56,18 @@ repositories {
    maven {
       url "https://plugins.gradle.org/m2/"
    }
+   maven {
+      releaseUrl
+      authentication {
+         awsIm(AwsImAuthentication)
+      }
+   }
+   maven {
+      snapshotUrl
+      authentication {
+         awsIm(AwsImAuthentication)
+      }
+   }
 }
 
 publishing {
