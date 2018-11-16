@@ -76,7 +76,7 @@ task('cleanJunit', type: Delete) {
 }
 
 ext.bucket = 's3://documentation.redpillanalytics.com'
-ext.bucketPath = project.name
+ext.bucketPath = 'gradle-utilities'
 
 
 task publishDocs {
