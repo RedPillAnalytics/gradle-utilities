@@ -35,7 +35,7 @@ githubRelease {
 
    token = githubToken
    owner = 'RedPillAnalytics'
-   repo = 'gradle-confluent'
+   repo = rootProject.name
    tagName = "v${version}"
    releaseAssets = fileTree(dir: buildDir, includes: ["**/*${version}*", "**/*${version}*.jar"]).toList()
 }
