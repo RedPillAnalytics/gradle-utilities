@@ -57,13 +57,13 @@ repositories {
       url "https://plugins.gradle.org/m2/"
    }
    maven {
-      releaseUrl
+      url releaseUrl
       authentication {
          awsIm(AwsImAuthentication)
       }
    }
    maven {
-      snapshotUrl
+      url snapshotUrl
       authentication {
          awsIm(AwsImAuthentication)
       }
@@ -78,11 +78,7 @@ publishing {
    }
    repositories {
       maven {
-         if (project.version.endsWith('-SNAPSHOT')) {
-            url snapshotUrl
-         } else {
-            url releaseUrl
-         }
+         url project.version.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
          authentication {
             awsIm(AwsImAuthentication)
          }
