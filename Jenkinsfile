@@ -25,10 +25,16 @@ pipeline {
          }
       }
 
-      stage('Publish') {
+      stage('Maven Publish') {
+         steps {
+            sh "$gradle ${options} publish"
+         }
+      }
+
+      stage('GitHub Publish') {
          when { branch "master" }
          steps {
-            sh "$gradle ${options} publish githubRelease"
+            sh "$gradle ${options} githubRelease"
          }
       }
       // Place for new Stage
