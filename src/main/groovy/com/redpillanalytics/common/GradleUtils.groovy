@@ -38,7 +38,7 @@ class GradleUtils {
       }
    }
 
-   static public getParameter(Project project, String name, String extension, String defaultValue = null) {
+   static getParameter(Project project, String name, String extension, String defaultValue = null) {
 
       // define the value we get along the way
       def value
@@ -59,11 +59,11 @@ class GradleUtils {
 
          value = project.ext.get(name)
 
-      } else if (BuildServer.getBuildParameter(name)) {
+      } else if (CI.getBuildParameter(name)) {
 
          // next are non dot notation environment variables
          // note: we support the Bamboo weird way of doing variables
-         value = BuildServer.getBuildParameter(name)
+         value = CI.getBuildParameter(name)
       } else {
 
          // next we return values from the custom extension
