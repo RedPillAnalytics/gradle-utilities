@@ -37,6 +37,13 @@ pipeline {
             sh "$gradle ${options} githubRelease"
          }
       }
+
+      stage('Bintray Publish') {
+         when { branch "master" }
+         steps {
+            sh "$gradle ${options} bintrayPublish"
+         }
+      }
       // Place for new Stage
 
    } // end of Stages
