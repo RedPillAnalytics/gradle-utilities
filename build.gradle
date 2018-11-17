@@ -6,7 +6,7 @@ plugins {
    id 'org.unbroken-dome.test-sets' version '1.5.1'
    id "com.github.ben-manes.versions" version "0.20.0"
    id "com.redpillanalytics.gradle-analytics" version "1.1.9"
-   //id "com.jfrog.bintray" version "1.+"
+   id "com.jfrog.bintray" version "1.8.4"
 }
 
 // send analytics
@@ -125,20 +125,23 @@ task publishDocs {
    dependsOn groovydoc
 }
 
-tasks.publish.dependsOn publishDocs
+publish.dependsOn publishDocs
 
-//bintray {
-//   user = bintrayUser
-//   key = bintrayKey
-//   pkg {
-//      repo = 'maven'
-//      name = rootProject.name
-//      userOrg = 'redpillanalytics'
-//      licenses = ['Apache-2.0']
-//      vcsUrl = 'https://github.com/RedPillAnalytics/gradle-utilities.git'
-//      version {
-//         name = project.version
-//      }
-//   }
-//}
+bintrayPublish.dependsOn bintrayUpload
+
+bintray {
+   user = bintrayUser
+   key = bintrayKey
+   publications = ['maven']
+   pkg {
+      repo = rootProject.name
+      name = rootProject.name
+      userOrg = 'redpillanalytics'
+      licenses = ['Apache-2.0']
+      vcsUrl = 'https://github.com/RedPillAnalytics/gradle-utilities.git'
+      version {
+         name = project.version
+      }
+   }
+}
 
