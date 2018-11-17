@@ -6,6 +6,7 @@ plugins {
    id 'org.unbroken-dome.test-sets' version '1.5.1'
    id "com.github.ben-manes.versions" version "0.20.0"
    id "com.redpillanalytics.gradle-analytics" version "1.1.9"
+   //id "com.jfrog.bintray" version "1.+"
 }
 
 // send analytics
@@ -43,12 +44,12 @@ githubRelease {
 dependencies {
 
    // basic Groovy/Gradle stuff
-   implementation gradleApi()
-   implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
-   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '+'
-   implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
+   compile gradleApi()
+   compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
+   compile group: 'org.slf4j', name: 'slf4j-simple', version: '+'
+   compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
 
-   testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
+   testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
 repositories {
@@ -125,3 +126,19 @@ task publishDocs {
 }
 
 tasks.publish.dependsOn publishDocs
+
+//bintray {
+//   user = bintrayUser
+//   key = bintrayKey
+//   pkg {
+//      repo = 'maven'
+//      name = rootProject.name
+//      userOrg = 'redpillanalytics'
+//      licenses = ['Apache-2.0']
+//      vcsUrl = 'https://github.com/RedPillAnalytics/gradle-utilities.git'
+//      version {
+//         name = project.version
+//      }
+//   }
+//}
+
