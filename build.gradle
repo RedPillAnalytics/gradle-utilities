@@ -133,6 +133,7 @@ bintray {
    user = bintrayUser
    key = bintrayKey
    publications = ['maven']
+   publish = true
    pkg {
       repo = rootProject.name
       name = rootProject.name
