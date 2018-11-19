@@ -141,6 +141,8 @@ bintray {
       vcsUrl = 'https://github.com/RedPillAnalytics/gradle-utilities.git'
       version {
          name = project.version
+         vcsTag = "v${project.version}"
+         released  = new Date()
       }
    }
 }
