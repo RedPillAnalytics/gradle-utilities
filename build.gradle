@@ -1,11 +1,10 @@
 plugins {
    id 'groovy'
    id 'maven-publish'
-   id "pl.allegro.tech.build.axion-release" version "1.9.3"
-   id "com.github.breadmoirai.github-release" version "2.0.1"
-   id 'org.unbroken-dome.test-sets' version '1.5.1'
+   id "pl.allegro.tech.build.axion-release" version "1.10.0"
+   id "com.github.breadmoirai.github-release" version "2.2.4"
    id "com.github.ben-manes.versions" version "0.20.0"
-   id "com.redpillanalytics.gradle-analytics" version "1.1.9"
+   id "com.redpillanalytics.gradle-analytics" version "1.1.20"
    id "com.jfrog.bintray" version "1.8.4"
 }
 
@@ -15,15 +14,6 @@ analytics {
    sinks {
       pubsub
    }
-}
-
-scmVersion {
-
-   tag {
-      prefix = 'v'
-      versionSeparator = ''
-   }
-   ignoreUncommittedChanges = false
 }
 
 //set Gradle version to SCM Version
@@ -43,13 +33,13 @@ githubRelease {
 
 dependencies {
 
-   // basic Groovy/Gradle stuff
    compile gradleApi()
-   compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
+   compile localGroovy()
+
    compile group: 'org.slf4j', name: 'slf4j-simple', version: '+'
    compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '+'
 
-   testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+   testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
 }
 
 repositories {
